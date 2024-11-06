@@ -9,3 +9,8 @@ target(project_name)
     add_packages("glm", "glfw", "vcpkg::gl3w")
 
     add_files("src/**.cpp")
+    add_headerfiles("src/**.h")
+    add_includedirs("src")
+    add_includedirs("src/MyGlWindow")
+    
+    set_rundir("$(projectdir)")

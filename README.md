@@ -1,6 +1,11 @@
-# Xmake-OpenGl
-Minimal repository template for project using [xmake](https://xmake.io/#/), [opengl](https://www.opengl.org/) and [gl3w](https://github.com/skaslev/gl3w)
+# KMU-Computer-Graphic
 
+This repository is a codebase of different exercices requested by Computer Graphics Courses #1 of KMU Uni.
+
+## Current results
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/92df317b-3c33-4892-a666-84ebded07f47" width="30%">
+</p>
 
 ## 📑 <samp>Requirements</samp>
 

@@ -14,5 +14,6 @@ private:
 	GLuint vaoHandle;
 	GLuint vbo_vertexPosition;
 	GLuint vbo_vertexColor;
+	GLuint vbo_vertex; // vbo: vertex position + vertex color
 	void setupBuffer();
 };

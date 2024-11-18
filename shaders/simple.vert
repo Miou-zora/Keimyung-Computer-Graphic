@@ -1,13 +1,14 @@
-#version 450
+#version 400
+layout(location = 0) in vec3 coord3d;
+layout(location = 1) in vec3 v_color;
 
-layout(location = 0) in vec4 vertexPosition; // 0: attribute nbr
-layout(location = 1) in vec3 vertexColor; // 1: attribute nbr
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
-out vec3 color;
+out vec3 f_color;
 
-void main()
-{
-	color = vertexColor;
-	// gl_Position : NDC coordinate : gl_Position must be set (vec4)
-	gl_Position = vertexPosition;
+void main(void) {
+    gl_Position = projection * view * model * vec4(coord3d, 1.0);
+    f_color = v_color;
 }

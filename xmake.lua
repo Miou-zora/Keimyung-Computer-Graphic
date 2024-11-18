@@ -12,5 +12,7 @@ target(project_name)
     add_headerfiles("src/**.h")
     add_includedirs("src")
     add_includedirs("src/MyGlWindow")
+    add_includedirs("src/Viewer")
+    add_includedirs("src/ColorCube")
     
     set_rundir("$(projectdir)")

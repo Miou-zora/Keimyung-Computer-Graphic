@@ -1,10 +1,7 @@
-#version 450
+#version 400
+in vec3 f_color;
+out vec4 color;
 
-in vec3 color;
-out vec4 fragColor; // out: pixel color
-
-void main()
-{
-	// 
-	fragColor = vec4(color, 1.0);	
+void main(void) {
+    color = vec4(f_color, 1.0);
 }

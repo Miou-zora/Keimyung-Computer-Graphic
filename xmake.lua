@@ -14,5 +14,6 @@ target(project_name)
     add_includedirs("src/MyGlWindow")
     add_includedirs("src/Viewer")
     add_includedirs("src/ColorCube")
+    add_includedirs("src/Cow")
     
     set_rundir("$(projectdir)")

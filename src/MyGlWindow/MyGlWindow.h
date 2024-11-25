@@ -2,7 +2,8 @@
 #include "GL/gl3w.h"
 #include <string>
 #include "Loader.h"
-#include "ColorCube.h"
+// #include "ColorCube.h"
+#include "Cow.h"
 #include "Viewer.h"
 
 class MyGlWindow {
@@ -22,7 +23,7 @@ public:
 	};
 private:
 	ShaderProgram* m_shaderProgram;
-	ColorCube* m_cube;
+	Cow* m_cube;
 	
 	int m_width;
 	int m_height;

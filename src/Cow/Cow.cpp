@@ -15,21 +15,33 @@ Cow::~Cow() {
 }
 
 void Cow::setup() {
-    std::vector<glm::vec3> normals;
-    normals.resize(1732); //# of vertices 1732 -> # of normal 1732
+    std::vector<glm::vec3> normalsOfFaces;
+    normalsOfFaces.resize(9468 / 3); //# of vertices 9468 -> # of normal 9468
 
-    for (int i = 0; i < 1732; i++) {
+    for (int i = 0; i < 9468 / 3; i++) {
         const glm::vec3& v0 = COW::vertices[COW::nvertices[i * 3]]; //1st vertex
         const glm::vec3& v1 = COW::vertices[COW::nvertices[i * 3 + 1]]; //2nd vertex
         const glm::vec3& v2 = COW::vertices[COW::nvertices[i * 3 + 2]]; //3rd vertex
         glm::vec3 n = glm::cross((v1 - v0), (v2 - v0)); //Cross product
         n = glm::normalize(n);
         
-        normals[COW::nvertices[i * 3]] = n; //Set the same normal to each vertex
-        normals[COW::nvertices[i * 3 + 1]] = n;
-        normals[COW::nvertices[i * 3 + 2]] = n;
+        normalsOfFaces[i] = n; //Set the same normal to the face
     }
 
+    std::vector<glm::vec3> normalsOfVertices;
+    normalsOfVertices.resize(1732);
+
+    for (int i = 0; i < 1732; i++) {
+        glm::vec3 sum = glm::vec3(0.0f);
+        int count = 0;
+        for (int j = 0; j < 9468 / 3; j++) {
+            if (COW::nvertices[j * 3] == i || COW::nvertices[j * 3 + 1] == i || COW::nvertices[j * 3 + 2] == i) {
+                sum += normalsOfFaces[j];
+                count++;
+            }
+        }
+        normalsOfVertices[i] = sum / (float)count;
+    }
 
     glGenVertexArrays(1, &vaoHandle);
     glBindVertexArray(vaoHandle);
@@ -44,7 +56,7 @@ void Cow::setup() {
     // Vertex colors VBO
     glGenBuffers(1, &vbo_cube_colors);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_colors);
-    glBufferData(GL_ARRAY_BUFFER,  normals.size() * sizeof(glm::vec3), normals.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,  normalsOfVertices.size() * sizeof(glm::vec3), normalsOfVertices.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
 

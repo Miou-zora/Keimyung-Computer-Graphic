@@ -5,7 +5,7 @@
 class Cow {
 private:
     GLuint vaoHandle;
-    GLuint vbo_cube_vertices, vbo_cube_colors, ibo_cube_elements;
+    GLuint vbo_vertices, vbo_normals, ibo_elements;
 
     void setup();
 

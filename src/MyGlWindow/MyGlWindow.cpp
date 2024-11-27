@@ -17,6 +17,10 @@ void MyGlWindow::setupBuffer() {
 	m_shaderProgram->addUniform("LightLocation"); //Light Position : vec4
 	m_shaderProgram->addUniform("Kd"); //Diffuse Object Color :vec3
 	m_shaderProgram->addUniform("Ld"); //Diffuse Light Color : vec3
+	m_shaderProgram->addUniform("Ka"); //Ambiant Object Color :vec3
+	m_shaderProgram->addUniform("La"); //Ambiant Light Color : vec3
+	m_shaderProgram->addUniform("Ks"); //Specular Object Color :vec3
+	m_shaderProgram->addUniform("Ls"); //Specular Light Color : vec3
 	m_shaderProgram->addUniform("ModelViewMatrix"); //View*Model : mat4
 	m_shaderProgram->addUniform("NormalMatrix"); //Refer next slide : mat3
 	m_shaderProgram->addUniform("MVP");
@@ -39,6 +43,10 @@ void MyGlWindow::draw() {
 	glm::vec4 lightPos(50, 50, 50, 1); //light position
 	glm::vec3 Kd(1, 1, 0); //Diffuse Object Color
 	glm::vec3 Ld(1, 1, 1); //Diffuse Light Color
+	glm::vec3 La(0.2, 0.2, 0.2); //Ambient Light Color
+	glm::vec3 Ka(1, 1, 0); //Ambient Object Color
+	glm::vec3 Ls(1, 1, 1); //Specular Light Color
+	glm::vec3 Ks(1, 1, 1); //Specular Object Color
 	glm::mat4 imvp = glm::inverse(mview);
 	glm::mat3 nmat = glm::mat3(glm::transpose(imvp)); //normal matrix
 
@@ -53,6 +61,14 @@ void MyGlWindow::draw() {
 	//for Kd
 	glUniform3fv(m_shaderProgram->uniform("Ld"), 1, glm::value_ptr(Ld));
 	//for Ld
+	glUniform3fv(m_shaderProgram->uniform("Ka"), 1, glm::value_ptr(Ka));
+	//for Ka
+	glUniform3fv(m_shaderProgram->uniform("La"), 1, glm::value_ptr(La));
+	//for La
+	glUniform3fv(m_shaderProgram->uniform("Ks"), 1, glm::value_ptr(Ks));
+	//for Ks
+	glUniform3fv(m_shaderProgram->uniform("Ls"), 1, glm::value_ptr(Ls));
+	//for Ls
 	glUniformMatrix4fv(m_shaderProgram->uniform("ModelViewMatrix"), 1, GL_FALSE, glm::value_ptr(mview));
 	//modelView
 	glUniformMatrix3fv(m_shaderProgram->uniform("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(nmat));

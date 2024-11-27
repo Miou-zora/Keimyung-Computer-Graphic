@@ -8,6 +8,10 @@ out vec3 LightIntensity; //Vertex Color
 uniform vec4 LightLocation;
 uniform vec3 Kd;
 uniform vec3 Ld;
+uniform vec3 Ka;
+uniform vec3 La;
+uniform vec3 Ks;
+uniform vec3 Ls;
 uniform mat4 ModelViewMatrix;
 uniform mat3 NormalMatrix;
 uniform mat4 MVP;
@@ -15,11 +19,11 @@ uniform mat4 MVP;
 void main()
 {
     vec3 N = normalize( NormalMatrix * VertexNormal);
-    //How to transform the VertexPosition into Eye Coordinate?
     vec4 P = ModelViewMatrix * VertexPosition;
-    //Vector from Light Locaiton to P
     vec3 L = normalize(LightLocation - P).xyz;
-     //Calculate Kd*Id*(L·N) //Remember that if (L·N) < 0, set it to 0.
-    LightIntensity = Kd * Ld * max( dot(L, N), 0.0);
+    vec3 diffuse = Kd * Ld * max( dot(L, N), 0.0);
+    vec3 ambient = Ka * La;
+    vec3 specular = Ks * Ls * pow( max( dot( reflect(-L, N), normalize(-P.xyz)), 0.0), 16.0);
+    LightIntensity = diffuse + ambient + specular;
     gl_Position = MVP * VertexPosition;
 }

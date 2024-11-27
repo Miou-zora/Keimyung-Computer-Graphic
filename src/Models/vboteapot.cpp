@@ -1,7 +1,6 @@
 #include "vboteapot.h"
 #include "teapotdata.h"
 
-#include <Windows.h>
 #include <GL/gl.h>
 #include <cstdio>
 #include <glm/glm.hpp>
@@ -30,7 +29,31 @@ VBOTeapot::VBOTeapot(int grid, mat4 lidTransform)
 
 
 
-	//create vao, vbos, ibo here
+	//create vao, vbo and ibo here... (We didn't use std::vector here...)
+	glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
+    // Vertex positions VBO
+    glGenBuffers(1, &VBO_position);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_position);
+    glBufferData(GL_ARRAY_BUFFER, verts * 3 * sizeof(float), v, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(0);
+
+    // Vertex Normal VBO
+    glGenBuffers(1, &VBO_normal);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_normal);
+    glBufferData(GL_ARRAY_BUFFER,  verts * 3 * sizeof(float), n, GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(1);
+
+    // Element indices buffer
+    glGenBuffers(1, &IBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, faces * 6 * sizeof(unsigned int), el, GL_STATIC_DRAW);
+
+    glBindVertexArray(0);
+	std::cout << "Teapot created" << std::endl;
 	
 
     delete [] v;
@@ -253,5 +276,7 @@ vec3 VBOTeapot::evaluateNormal( int gridU, int gridV, float *B, float *dB, vec3 
 
 void VBOTeapot::draw() const
 {
-	
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, faces * 6 * sizeof(unsigned int), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }

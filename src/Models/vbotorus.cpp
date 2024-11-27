@@ -9,7 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/constants.hpp>
 
-
+#include <iostream>
 
 #include <cstdio>
 #include <cmath>
@@ -24,40 +24,59 @@ VBOTorus::VBOTorus(float outerRadius, float innerRadius, int nsides, int nrings)
 	GLfloat * v = new GLfloat[3 * nVerts];
     // Normals
 	GLfloat * n = new GLfloat[3 * nVerts];
-//     // Tex coords
-//     float * tex = new float[2 * nVerts];
+    // // Tex coords
+    // float * tex = new float[2 * nVerts];
     // Elements
     unsigned int * el = new unsigned int[6 * faces];
 
     // Generate the vertex data
     generateVerts(v, n, el, outerRadius, innerRadius);
 
+    //create vao, vbo and ibo here... (We didn't use std::vector here...)
+	glGenVertexArrays(1, &vaoHandle);
+    glBindVertexArray(vaoHandle);
 
+    // Vertex positions VBO
+    glGenBuffers(1, &vbo_cube_vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_vertices);
+    glBufferData(GL_ARRAY_BUFFER, 3 * nVerts * sizeof(GLfloat), v, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(0);
 
-	//create vao, vbo, ibo here
+    // Vertex Normal VBO
+    glGenBuffers(1, &vbo_cube_normals);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_cube_normals);
+    glBufferData(GL_ARRAY_BUFFER,  3 * nVerts * sizeof(GLfloat), n, GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(1);
 
+    // Element indices buffer
+    glGenBuffers(1, &ibo_cube_elements);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_cube_elements);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, faces * 6 * sizeof(unsigned int), el, GL_STATIC_DRAW);
 
+    glBindVertexArray(0);
+	std::cout << "Torus created" << std::endl;
 
     delete [] v;
     delete [] n;
     delete [] el;
-
-
-    glBindVertexArray(0);
 }
 
 
 VBOTorus::~VBOTorus()
 {
-
-	// delete shaderProgram;
+    glDeleteBuffers(1, &vbo_cube_vertices);
+    glDeleteBuffers(1, &vbo_cube_normals);
+    glDeleteBuffers(1, &ibo_cube_elements);
+    glDeleteVertexArrays(1, &vaoHandle);
 }
 
 void VBOTorus::draw() const 
 {
-
-
-
+    glBindVertexArray(vaoHandle);
+	glDrawElements(GL_TRIANGLES, faces * 6 * sizeof(unsigned int), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }
 
 void VBOTorus::generateVerts(GLfloat * verts, GLfloat * norms, unsigned int * el,

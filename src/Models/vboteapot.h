@@ -14,7 +14,7 @@ using glm::mat4;
 class VBOTeapot
 {
 private:
-    unsigned int vaoHandle;
+    GLuint VAO, VBO_position, VBO_normal, IBO;
     unsigned int faces;
 
     void generatePatches(float * v, float * n, float *tc, unsigned int* el, int grid);
@@ -35,7 +35,7 @@ private:
     void moveLid(int,float *,mat4);
 
 public:
-    VBOTeapot(int grid, mat4 lidTransform);
+    VBOTeapot(int grid = 64, mat4 lidTransform = mat4(1.0f));
 	void draw() const;
 
 };

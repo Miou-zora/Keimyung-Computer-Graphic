@@ -29,6 +29,28 @@ void MyGlWindow::setupBuffer() {
 
 	m_shaderProgram->addUniform("CamPos");
 
+	
+	glm::vec4 lightPos(50, 50, 50, 1);
+	glm::vec3 Ia(0.2, 0.2, 0.2);
+	glm::vec3 Id(1, 1, 1);
+	glm::vec3 Is(1, 1, 1);
+	GLfloat shiness = 10;
+	glm::vec3 Ka(1, 1, 0);
+	glm::vec3 Kd(1, 1, 0);
+	glm::vec3 Ks(1, 1, 1);
+
+	m_shaderProgram->use();
+
+	glUniform4fv(m_shaderProgram->uniform("Light.Position"), 1, glm::value_ptr(lightPos));
+	glUniform3fv(m_shaderProgram->uniform("Light.Ia"), 1, glm::value_ptr(Ia));
+	glUniform3fv(m_shaderProgram->uniform("Light.Id"), 1, glm::value_ptr(Id));
+	glUniform3fv(m_shaderProgram->uniform("Light.Is"), 1, glm::value_ptr(Is));
+	glUniform3fv(m_shaderProgram->uniform("Material.Ka"), 1, glm::value_ptr(Ka));
+	glUniform3fv(m_shaderProgram->uniform("Material.Kd"), 1, glm::value_ptr(Kd));
+	glUniform3fv(m_shaderProgram->uniform("Material.Ks"), 1, glm::value_ptr(Ks));
+	glUniform1fv(m_shaderProgram->uniform("Material.Shiness"), 1, &shiness);
+
+	m_shaderProgram->disable();
 
 	initialize();
 }
@@ -48,33 +70,16 @@ void MyGlWindow::draw() {
 	glm::mat4 imvp = glm::inverse(model);
 	glm::mat3 nmat = glm::mat3(glm::transpose(imvp)); //normal matrix
 
-	glm::vec4 lightPos(50, 50, 50, 1);
-	glm::vec3 Ia(0.2, 0.2, 0.2);
-	glm::vec3 Id(1, 1, 1);
-	glm::vec3 Is(1, 1, 1);
-	GLfloat shiness = 10;
-	glm::vec3 Ka(1, 1, 0);
-	glm::vec3 Kd(1, 1, 0);
-	glm::vec3 Ks(1, 1, 1);
-
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
 	m_shaderProgram->use();
 
-	glUniform4fv(m_shaderProgram->uniform("Light.Position"), 1, glm::value_ptr(lightPos));
-	glUniform3fv(m_shaderProgram->uniform("Light.Ia"), 1, glm::value_ptr(Ia));
-	glUniform3fv(m_shaderProgram->uniform("Light.Id"), 1, glm::value_ptr(Id));
-	glUniform3fv(m_shaderProgram->uniform("Light.Is"), 1, glm::value_ptr(Is));
-	glUniform3fv(m_shaderProgram->uniform("Material.Ka"), 1, glm::value_ptr(Ka));
-	glUniform3fv(m_shaderProgram->uniform("Material.Kd"), 1, glm::value_ptr(Kd));
-	glUniform3fv(m_shaderProgram->uniform("Material.Ks"), 1, glm::value_ptr(Ks));
-	glUniform1fv(m_shaderProgram->uniform("Material.Shiness"), 1, &shiness);
-	glUniform3fv(m_shaderProgram->uniform("CamPos"), 1, glm::value_ptr(m_viewer->getViewPoint()));
-	glUniformMatrix4fv(m_shaderProgram->uniform("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix3fv(m_shaderProgram->uniform("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(nmat));
+	glUniformMatrix4fv(m_shaderProgram->uniform("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(m_shaderProgram->uniform("MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
+	glUniform3fv(m_shaderProgram->uniform("CamPos"), 1, glm::value_ptr(m_viewer->getViewPoint()));
 
 	if (m_cube) m_cube->draw();
 

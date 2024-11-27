@@ -7,7 +7,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
-Sphere::Sphere()
+Sphere::Sphere() : Sphere(1.0f, 20, 20)
 {
 
 }
@@ -15,17 +15,17 @@ Sphere::Sphere()
 
 Sphere::~Sphere()
 {
+	glDeleteBuffers(1, &VBO_position);
+	glDeleteBuffers(1, &VBO_normal);
+	glDeleteBuffers(1, &IBO);
+	glDeleteVertexArrays(1, &VAO);
 }
 
-
+#include <iostream>
 
 Sphere::Sphere(float rad, GLuint sl, GLuint st) :
 radius(rad), slices(sl), stacks(st)
 {
-
-
-	
-
 	nVerts = (slices + 1) * (stacks + 1);
 	elements = (slices * 2 * (stacks - 1)) * 3;
 
@@ -40,10 +40,32 @@ radius(rad), slices(sl), stacks(st)
 
 	// Generate the vertex data
 	generateVerts(v, n, tex, el);
-	
 
 	//create vao, vbo and ibo here... (We didn't use std::vector here...)
+	glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
 
+    // Vertex positions VBO
+    glGenBuffers(1, &VBO_position);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_position);
+    glBufferData(GL_ARRAY_BUFFER, 3 * nVerts * sizeof(float), v, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(0);
+
+    // Vertex Normal VBO
+    glGenBuffers(1, &VBO_normal);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_normal);
+    glBufferData(GL_ARRAY_BUFFER,  3 * nVerts * sizeof(float), n, GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(1);
+
+    // Element indices buffer
+    glGenBuffers(1, &IBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements * sizeof(unsigned int), el, GL_STATIC_DRAW);
+
+    glBindVertexArray(0);
+	std::cout << "Sphere created" << std::endl;
 
 	delete[] v;
 	delete[] n;
@@ -54,7 +76,9 @@ radius(rad), slices(sl), stacks(st)
 
 void Sphere::draw() 
 {
-
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, (slices * 2 * (stacks - 1)) * 3, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }
 
 void Sphere::generateVerts(float * verts, float * norms, float * tex,

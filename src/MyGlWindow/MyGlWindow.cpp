@@ -56,7 +56,7 @@ void MyGlWindow::setupBuffer() {
 }
 
 void MyGlWindow::initialize() {
-	m_cube = new Cow();
+	m_cube = new Sphere();
 }
 
 void MyGlWindow::draw() {

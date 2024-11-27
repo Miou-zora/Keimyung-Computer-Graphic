@@ -14,16 +14,21 @@ void MyGlWindow::setupBuffer() {
 	m_shaderProgram->initFromFiles("shaders/simple.vert", "shaders/simple.frag");
 
 	// Add uniforms
-	m_shaderProgram->addUniform("LightLocation"); //Light Position : vec4
-	m_shaderProgram->addUniform("Kd"); //Diffuse Object Color :vec3
-	m_shaderProgram->addUniform("Ld"); //Diffuse Light Color : vec3
-	m_shaderProgram->addUniform("Ka"); //Ambiant Object Color :vec3
-	m_shaderProgram->addUniform("La"); //Ambiant Light Color : vec3
-	m_shaderProgram->addUniform("Ks"); //Specular Object Color :vec3
-	m_shaderProgram->addUniform("Ls"); //Specular Light Color : vec3
-	m_shaderProgram->addUniform("ModelViewMatrix"); //View*Model : mat4
-	m_shaderProgram->addUniform("NormalMatrix"); //Refer next slide : mat3
 	m_shaderProgram->addUniform("MVP");
+	m_shaderProgram->addUniform("ModelMatrix"); //View*Model : mat4
+	m_shaderProgram->addUniform("NormalMatrix"); //Refer next slide : mat3
+
+	m_shaderProgram->addUniform("Light.Position");
+	m_shaderProgram->addUniform("Light.Ia");
+	m_shaderProgram->addUniform("Light.Id");
+	m_shaderProgram->addUniform("Light.Is");
+	m_shaderProgram->addUniform("Material.Ka");
+	m_shaderProgram->addUniform("Material.Kd");
+	m_shaderProgram->addUniform("Material.Ks");
+	m_shaderProgram->addUniform("Material.Shiness");
+
+	m_shaderProgram->addUniform("CamPos");
+
 
 	initialize();
 }
@@ -37,44 +42,39 @@ void MyGlWindow::draw() {
 	glm::mat4 model = glm::mat4(1.0f); // No rotation
 	glm::mat4 view = glm::lookAt(m_viewer->getViewPoint(), m_viewer->getViewCenter(), m_viewer->getUpVector());
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)m_width / m_height, 0.1f, 100.0f);
-
+	
 	glm::mat4 mview = view * model;
 	glm::mat4 mvp = projection * view * model;
-	glm::vec4 lightPos(50, 50, 50, 1); //light position
-	glm::vec3 Kd(1, 1, 0); //Diffuse Object Color
-	glm::vec3 Ld(1, 1, 1); //Diffuse Light Color
-	glm::vec3 La(0.2, 0.2, 0.2); //Ambient Light Color
-	glm::vec3 Ka(1, 1, 0); //Ambient Object Color
-	glm::vec3 Ls(1, 1, 1); //Specular Light Color
-	glm::vec3 Ks(1, 1, 1); //Specular Object Color
-	glm::mat4 imvp = glm::inverse(mview);
+	glm::mat4 imvp = glm::inverse(model);
 	glm::mat3 nmat = glm::mat3(glm::transpose(imvp)); //normal matrix
+
+	glm::vec4 lightPos(50, 50, 50, 1);
+	glm::vec3 Ia(0.2, 0.2, 0.2);
+	glm::vec3 Id(1, 1, 1);
+	glm::vec3 Is(1, 1, 1);
+	GLfloat shiness = 10;
+	glm::vec3 Ka(1, 1, 0);
+	glm::vec3 Kd(1, 1, 0);
+	glm::vec3 Ks(1, 1, 1);
+
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
 	m_shaderProgram->use();
 
-	glUniform4fv(m_shaderProgram->uniform("LightLocation"), 1, glm::value_ptr(lightPos));
-	//for LightPos
-	glUniform3fv(m_shaderProgram->uniform("Kd"), 1, glm::value_ptr(Kd));
-	//for Kd
-	glUniform3fv(m_shaderProgram->uniform("Ld"), 1, glm::value_ptr(Ld));
-	//for Ld
-	glUniform3fv(m_shaderProgram->uniform("Ka"), 1, glm::value_ptr(Ka));
-	//for Ka
-	glUniform3fv(m_shaderProgram->uniform("La"), 1, glm::value_ptr(La));
-	//for La
-	glUniform3fv(m_shaderProgram->uniform("Ks"), 1, glm::value_ptr(Ks));
-	//for Ks
-	glUniform3fv(m_shaderProgram->uniform("Ls"), 1, glm::value_ptr(Ls));
-	//for Ls
-	glUniformMatrix4fv(m_shaderProgram->uniform("ModelViewMatrix"), 1, GL_FALSE, glm::value_ptr(mview));
-	//modelView
+	glUniform4fv(m_shaderProgram->uniform("Light.Position"), 1, glm::value_ptr(lightPos));
+	glUniform3fv(m_shaderProgram->uniform("Light.Ia"), 1, glm::value_ptr(Ia));
+	glUniform3fv(m_shaderProgram->uniform("Light.Id"), 1, glm::value_ptr(Id));
+	glUniform3fv(m_shaderProgram->uniform("Light.Is"), 1, glm::value_ptr(Is));
+	glUniform3fv(m_shaderProgram->uniform("Material.Ka"), 1, glm::value_ptr(Ka));
+	glUniform3fv(m_shaderProgram->uniform("Material.Kd"), 1, glm::value_ptr(Kd));
+	glUniform3fv(m_shaderProgram->uniform("Material.Ks"), 1, glm::value_ptr(Ks));
+	glUniform1fv(m_shaderProgram->uniform("Material.Shiness"), 1, &shiness);
+	glUniform3fv(m_shaderProgram->uniform("CamPos"), 1, glm::value_ptr(m_viewer->getViewPoint()));
+	glUniformMatrix4fv(m_shaderProgram->uniform("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix3fv(m_shaderProgram->uniform("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(nmat));
-	//normalMatrix
 	glUniformMatrix4fv(m_shaderProgram->uniform("MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
-	//mvp
 
 	if (m_cube) m_cube->draw();
 

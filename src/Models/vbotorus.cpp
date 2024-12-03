@@ -14,6 +14,8 @@
 #include <cstdio>
 #include <cmath>
 
+#include "Loader.h"
+
 VBOTorus::VBOTorus(float outerRadius, float innerRadius, int nsides, int nrings) :
         rings(nrings), sides(nsides)
 {
@@ -72,8 +74,16 @@ VBOTorus::~VBOTorus()
     glDeleteVertexArrays(1, &vaoHandle);
 }
 
-void VBOTorus::draw() const 
+void VBOTorus::draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader) const 
 {
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(6.0f, 0.0f, 0.0f));
+	glm::mat4 mview = view * model;
+	glm::mat4 mvp = projection * view * model;
+	glm::mat4 imvp = glm::inverse(model);
+	glm::mat3 nmat = glm::mat3(glm::transpose(imvp)); //normal matrix
+	glUniformMatrix3fv(shader->uniform("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(nmat));
+	glUniformMatrix4fv(shader->uniform("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(shader->uniform("MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
     glBindVertexArray(vaoHandle);
 	glDrawElements(GL_TRIANGLES, faces * 6 * sizeof(unsigned int), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

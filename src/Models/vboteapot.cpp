@@ -274,8 +274,17 @@ vec3 VBOTeapot::evaluateNormal( int gridU, int gridV, float *B, float *dB, vec3 
     return glm::normalize( glm::cross( du, dv ) );
 }
 
-void VBOTeapot::draw() const
+void VBOTeapot::draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader) const
 {
+	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, -1.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::mat4 mview = view * model;
+	glm::mat4 mvp = projection * view * model;
+	glm::mat4 imvp = glm::inverse(model);
+	glm::mat3 nmat = glm::mat3(glm::transpose(imvp)); //normal matrix
+	glUniformMatrix3fv(shader->uniform("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(nmat));
+	glUniformMatrix4fv(shader->uniform("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(shader->uniform("MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, faces * 6 * sizeof(unsigned int), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

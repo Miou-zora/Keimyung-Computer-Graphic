@@ -2,10 +2,14 @@
 #include "GL/gl3w.h"
 #include <string>
 #include "Loader.h"
+
 #include "Cow.h"
 #include "Sphere.h"
 #include "vbotorus.h"
 #include "vboteapot.h"
+#include "Quad.h"
+#include "Plane.h"
+
 #include "Viewer.h"
 
 class MyGlWindow {
@@ -29,6 +33,8 @@ private:
 	Sphere* m_sphere;
 	VBOTorus* m_torus;
 	VBOTeapot* m_teapot;
+	Quad* m_quad;
+	Plane* m_plane;
 
 	int m_width;
 	int m_height;

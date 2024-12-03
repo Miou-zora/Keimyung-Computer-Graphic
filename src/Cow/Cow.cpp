@@ -2,6 +2,13 @@
 #include "Cow.h"
 #include "cow_data.h"
 #include <vector>
+#include <GL/gl.h>
+#include <cstdio>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/constants.hpp>
 
 Cow::Cow() {
     setup();
@@ -68,7 +75,16 @@ void Cow::setup() {
     glBindVertexArray(0);
 }
 
-void Cow::draw() {
+void Cow::draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader) {
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(2.0f, -1.0f, 0.0f));
+	model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+	glm::mat4 mview = view * model;
+	glm::mat4 mvp = projection * view * model;
+	glm::mat4 imvp = glm::inverse(model);
+	glm::mat3 nmat = glm::mat3(glm::transpose(imvp)); //normal matrix
+	glUniformMatrix3fv(shader->uniform("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(nmat));
+	glUniformMatrix4fv(shader->uniform("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(shader->uniform("MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
     glBindVertexArray(vaoHandle);
     glDrawElements(GL_TRIANGLES, 9468, GL_UNSIGNED_INT, 0);
 }

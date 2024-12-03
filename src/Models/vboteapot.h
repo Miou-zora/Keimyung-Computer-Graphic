@@ -36,7 +36,7 @@ private:
 
 public:
     VBOTeapot(int grid = 64, mat4 lidTransform = mat4(1.0f));
-	void draw() const;
+	void draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader) const;
 
 };
 

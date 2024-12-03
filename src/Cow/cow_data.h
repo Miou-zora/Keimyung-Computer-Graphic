@@ -1,6 +1,7 @@
-
+#pragma once
 
 #include <glm/glm.hpp>
+
 namespace COW {
 uint32_t nvertices[9468] = {
 2, 0, 3, 1, 3, 0, 4, 2, 

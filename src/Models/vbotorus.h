@@ -3,6 +3,7 @@
 
 #include <GL/gl3w.h>
 #include <glm/mat4x4.hpp>
+#include "Loader.h"
 
 
 class VBOTorus 
@@ -18,7 +19,7 @@ public:
     VBOTorus() : VBOTorus(0.7f, 0.3f, 50, 50) {}
     VBOTorus(float, float, int, int);
 	virtual ~VBOTorus();
-	void draw() const;
+	void draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader) const;
 };
 
 #endif // VBOTORUS_H

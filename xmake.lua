@@ -16,5 +16,7 @@ target(project_name)
     add_includedirs("src/Viewer")
     add_includedirs("src/ColorCube")
     add_includedirs("src/Cow")
+    add_includedirs("src/Material")
+    add_includedirs("src/Mesh")
     
     set_rundir("$(projectdir)")

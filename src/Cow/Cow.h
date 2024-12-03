@@ -1,6 +1,10 @@
 // ColorCube.h
 #pragma once
+
 #include <GL/gl3w.h>
+#include <GL/gl.h>
+#include <glm/glm.hpp>
+#include "Loader.h"
 
 class Cow {
 private:
@@ -12,5 +16,5 @@ private:
 public:
     Cow();
     ~Cow();
-    void draw();
+    void draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader);
 };

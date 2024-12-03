@@ -20,7 +20,7 @@ public:
 	~Sphere();
 
 	void setup();
-	void draw();
+	void draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader);
 	int getVertexArrayHandle();
 
 	GLuint VAO, VBO_position, VBO_normal, IBO;

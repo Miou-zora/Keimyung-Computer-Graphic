@@ -28,7 +28,8 @@ void main() {
     vec3 V = normalize(CamPos - Position);
     vec3 diffuse = Material.Kd * Light.Id * max( dot(L, Normal), 0.0);
     vec3 ambient = Material.Ka * Light.Ia;
-    vec3 specular = Material.Ks * Light.Is * pow( max( dot( reflect(-L, Normal), V), 0.0), Material.Shiness);
+    vec3 HalfwayVector = normalize(V + L);
+    vec3 specular = Material.Ks * Light.Is * pow( max( dot( HalfwayVector, Normal), 0.0), Material.Shiness);
     vec3 color = ambient + diffuse + specular;
     FragColor = vec4(color, 1.0);
 }

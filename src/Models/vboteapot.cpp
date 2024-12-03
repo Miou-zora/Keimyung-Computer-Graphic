@@ -26,7 +26,14 @@ VBOTeapot::VBOTeapot(int grid, mat4 lidTransform)
 
 	generatePatches(v, n, tc, el, grid);
 
-
+    // 0.0, 0.1, 0.06, 1.0,
+    // 0.0, 0.50980392,0.50980392,1.0,
+    // 0.50196078,0.50196078,0.50196078,1.0,
+    // 32,
+    mat.Shiness = 32.0f;
+    mat.Ka = glm::vec3(0.0f, 0.1f, 0.06f);
+    mat.Kd = glm::vec3(0.0f, 0.50980392f, 0.50980392f);
+    mat.Ks = glm::vec3(0.50196078f, 0.50196078f, 0.50196078f);
 
 
 	//create vao, vbo and ibo here... (We didn't use std::vector here...)
@@ -276,6 +283,10 @@ vec3 VBOTeapot::evaluateNormal( int gridU, int gridV, float *B, float *dB, vec3 
 
 void VBOTeapot::draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader) const
 {
+    glUniform3fv(shader->uniform("Material.Ka"), 1, glm::value_ptr(mat.Ka));
+    glUniform3fv(shader->uniform("Material.Kd"), 1, glm::value_ptr(mat.Kd));
+    glUniform3fv(shader->uniform("Material.Ks"), 1, glm::value_ptr(mat.Ks));
+    glUniform1fv(shader->uniform("Material.Shiness"), 1, &mat.Shiness);
 	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, -1.0f, 0.0f));
     model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	glm::mat4 mview = view * model;

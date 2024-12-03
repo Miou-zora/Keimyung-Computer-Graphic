@@ -5,6 +5,7 @@
 #include <GL/gl.h>
 #include <glm/glm.hpp>
 #include "Loader.h"
+#include "Material.hpp"
 
 using glm::vec4;
 using glm::vec3;
@@ -35,6 +36,7 @@ private:
     void moveLid(int,float *,mat4);
 
 public:
+    Material mat;
     VBOTeapot(int grid = 64, mat4 lidTransform = mat4(1.0f));
 	void draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader) const;
 

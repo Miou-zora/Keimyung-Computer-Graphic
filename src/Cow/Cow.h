@@ -5,6 +5,7 @@
 #include <GL/gl.h>
 #include <glm/glm.hpp>
 #include "Loader.h"
+#include "Material.hpp"
 
 class Cow {
 private:
@@ -16,5 +17,6 @@ private:
 public:
     Cow();
     ~Cow();
+    Material mat;
     void draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader);
 };

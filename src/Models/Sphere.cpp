@@ -41,6 +41,16 @@ radius(rad), slices(sl), stacks(st)
 	// Generate the vertex data
 	generateVerts(v, n, tex, el);
 
+	// 0.25, 0.25, 0.25, 1.0,
+	// 0.4, 0.4, 0.4, 1.0,
+	// 0.774597,0.774597, 0.774597, 1.0,
+	// 76.8,
+	mat.Shiness = 76.8f;
+	mat.Ka = glm::vec3(0.25f, 0.25f, 0.25f);
+	mat.Kd = glm::vec3(0.4f, 0.4f, 0.4f);
+	mat.Ks = glm::vec3(0.774597f, 0.774597f, 0.774597f);
+
+
 	//create vao, vbo and ibo here... (We didn't use std::vector here...)
 	glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -76,6 +86,10 @@ radius(rad), slices(sl), stacks(st)
 
 void Sphere::draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader) 
 {
+	glUniform3fv(shader->uniform("Material.Ka"), 1, glm::value_ptr(mat.Ka));
+    glUniform3fv(shader->uniform("Material.Kd"), 1, glm::value_ptr(mat.Kd));
+    glUniform3fv(shader->uniform("Material.Ks"), 1, glm::value_ptr(mat.Ks));
+    glUniform1fv(shader->uniform("Material.Shiness"), 1, &mat.Shiness);
 	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(4.0f, 0.0f, 0.0f));
 	glm::mat4 mview = view * model;
 	glm::mat4 mvp = projection * view * model;

@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "Loader.h"
-
+#include "Material.hpp"
 
 
 class Sphere
@@ -28,6 +28,7 @@ public:
 	
 
 private:
+	Material mat;
 	GLuint nVerts, elements;
 	float radius;
 	GLuint slices, stacks;

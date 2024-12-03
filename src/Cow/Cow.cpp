@@ -50,6 +50,11 @@ void Cow::setup() {
         normals_vertices[i] = sum / (float)count;
     }
 
+    mat.Shiness = 51.2f;
+    mat.Ka = glm::vec3(0.24725f, 0.1995f, 0.0745f);
+    mat.Kd = glm::vec3(0.75164f, 0.60648f, 0.22648f);
+    mat.Ks = glm::vec3(0.628281f, 0.555802f, 0.366065f);
+
     glGenVertexArrays(1, &vaoHandle);
     glBindVertexArray(vaoHandle);
 
@@ -76,6 +81,10 @@ void Cow::setup() {
 }
 
 void Cow::draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader) {
+    glUniform3fv(shader->uniform("Material.Ka"), 1, glm::value_ptr(mat.Ka));
+    glUniform3fv(shader->uniform("Material.Kd"), 1, glm::value_ptr(mat.Kd));
+    glUniform3fv(shader->uniform("Material.Ks"), 1, glm::value_ptr(mat.Ks));
+    glUniform1fv(shader->uniform("Material.Shiness"), 1, &mat.Shiness);
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(2.0f, -1.0f, 0.0f));
 	model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 	glm::mat4 mview = view * model;

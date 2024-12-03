@@ -4,6 +4,7 @@
 #include <GL/gl3w.h>
 #include <glm/mat4x4.hpp>
 #include "Loader.h"
+#include "Material.hpp"
 
 
 class VBOTorus 
@@ -16,6 +17,7 @@ private:
                        float , float);
 
 public:
+    Material mat;
     VBOTorus() : VBOTorus(0.7f, 0.3f, 50, 50) {}
     VBOTorus(float, float, int, int);
 	virtual ~VBOTorus();

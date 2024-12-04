@@ -4,7 +4,7 @@ This repository is a codebase of different exercices requested by Computer Graph
 
 ## Current results
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/a3e60a02-1ecd-4db4-90b4-ea59d70d1feb" width="30%">
+  <img src="https://github.com/user-attachments/assets/57d9dc6f-e88a-49be-96a2-fd24f6bbc5b7" width="30%">
 </p>
 
 ## 📑 <samp>Requirements</samp>

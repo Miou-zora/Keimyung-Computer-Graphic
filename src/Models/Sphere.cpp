@@ -7,7 +7,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
-Sphere::Sphere() : Sphere(1.0f, 20, 20)
+Sphere::Sphere() : Sphere(1.0f, 100, 100)
 {
 
 }
@@ -99,7 +99,7 @@ void Sphere::draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader)
 	glUniformMatrix4fv(shader->uniform("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(shader->uniform("MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, (slices * 2 * (stacks - 1)) * 3, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, elements, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 

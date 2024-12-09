@@ -85,7 +85,7 @@ void Cow::draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader) {
     glUniform3fv(shader->uniform("Material.Kd"), 1, glm::value_ptr(mat.Kd));
     glUniform3fv(shader->uniform("Material.Ks"), 1, glm::value_ptr(mat.Ks));
     glUniform1fv(shader->uniform("Material.Shiness"), 1, &mat.Shiness);
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(2.0f, -1.0f, 0.0f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(6.0f, -1.0f, 0.0f));
 	model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 	glm::mat4 mview = view * model;
 	glm::mat4 mvp = projection * view * model;

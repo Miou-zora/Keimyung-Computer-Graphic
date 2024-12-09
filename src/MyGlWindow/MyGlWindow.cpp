@@ -97,9 +97,9 @@ void MyGlWindow::draw() {
 
 	glUniform3fv(m_shaderProgram->uniform("CamPos"), 1, glm::value_ptr(m_viewer->getViewPoint()));
 
-	if (m_teapot) m_teapot->draw(projection, view, m_shaderProgram);
-	if (m_cow) m_cow->draw(projection, view, m_shaderProgram);
-	if (m_sphere) m_sphere->draw(projection, view, m_shaderProgram);
+	// if (m_teapot) m_teapot->draw(projection, view, m_shaderProgram);
+	// if (m_cow) m_cow->draw(projection, view, m_shaderProgram);
+	// if (m_sphere) m_sphere->draw(projection, view, m_shaderProgram);
 	if (m_torus) m_torus->draw(projection, view, m_shaderProgram);
 	// if (m_quad) m_quad->draw(projection, view, m_shaderProgram);
 	if (m_plane) m_plane->draw(projection, view, m_shaderProgram);

@@ -39,10 +39,10 @@ VBOTorus::VBOTorus(float outerRadius, float innerRadius, int nsides, int nrings)
     0.992157, 0.941176, 0.807843, 1.0,
     27.89743616,
 
-    mat.Shiness = 27.89743616f;
-    mat.Ka = glm::vec3(0.329412f, 0.223529f, 0.027451f);
-    mat.Kd = glm::vec3(0.780392f, 0.568627f, 0.113725f);
-    mat.Ks = glm::vec3(0.992157f, 0.941176f, 0.807843f);
+    mat.Shiness = 180.f;
+    mat.Ka = glm::vec3(0.1, 0.1, 0.1);
+    mat.Kd = glm::vec3(0.4, 0.4, 0.4);
+    mat.Ks = glm::vec3(0.9,0.9, 0.9);
 
     //create vao, vbo and ibo here... (We didn't use std::vector here...)
 	glGenVertexArrays(1, &vaoHandle);
@@ -90,7 +90,8 @@ void VBOTorus::draw(glm::mat4 projection, glm::mat4 view, ShaderProgram *shader)
     glUniform3fv(shader->uniform("Material.Kd"), 1, glm::value_ptr(mat.Kd));
     glUniform3fv(shader->uniform("Material.Ks"), 1, glm::value_ptr(mat.Ks));
     glUniform1fv(shader->uniform("Material.Shiness"), 1, &mat.Shiness);
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(6.0f, 0.0f, 0.0f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(90.f), glm::vec3(1.f, 0.f, 0.f));
 	glm::mat4 mview = view * model;
 	glm::mat4 mvp = projection * view * model;
 	glm::mat4 imvp = glm::inverse(model);

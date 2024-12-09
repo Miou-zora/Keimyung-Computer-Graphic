@@ -21,10 +21,10 @@ void MyGlWindow::setupBuffer() {
 	m_shaderProgram->addUniform("ModelMatrix"); //View*Model : mat4
 	m_shaderProgram->addUniform("NormalMatrix"); //Refer next slide : mat3
 
-	m_shaderProgram->addUniform("Light.Position");
-	m_shaderProgram->addUniform("Light.Ia");
-	m_shaderProgram->addUniform("Light.Id");
-	m_shaderProgram->addUniform("Light.Is");
+	for (int i = 0; i < 5; i++) {
+		m_shaderProgram->addUniform("Light[" + std::to_string(i) + "].Position");
+		m_shaderProgram->addUniform("Light[" + std::to_string(i) + "].Intensity");
+	}
 	m_shaderProgram->addUniform("Material.Ka");
 	m_shaderProgram->addUniform("Material.Kd");
 	m_shaderProgram->addUniform("Material.Ks");
@@ -44,6 +44,11 @@ void MyGlWindow::initialize() {
 	m_plane = new Plane();
 }
 
+struct Light {
+	glm::vec4 Position;
+	glm::vec3 Intensity;
+};
+
 void MyGlWindow::draw() {
 	// Apply a static model matrix without rotation to stop the cube from spinning
 	glm::mat4 view = glm::lookAt(m_viewer->getViewPoint(), m_viewer->getViewCenter(), m_viewer->getUpVector());
@@ -54,22 +59,37 @@ void MyGlWindow::draw() {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE); //Ebable Cull face
+	glCullFace(GL_BACK);
 
 	m_shaderProgram->use();
 
-	glm::vec4 lightPos(50, 50, 50, 1);
-	glm::vec3 Ia(0.9, 0.9, 0.9);
-	glm::vec3 Id(0.9, 0.9, 0.9);
-	glm::vec3 Is(0.9, 0.9, 0.9);
+	Light light[] = {
+		{glm::vec4(0, 0, 0, 1), glm::vec3(0.0f, 0.8f, 0.8f)},
+		{glm::vec4(0, 0, 0, 1), glm::vec3(0.0f, 0.0f, 0.8f)},
+		{glm::vec4(0, 0, 0, 1), glm::vec3(0.8f, 0.0f, 0.0f)},
+		{glm::vec4(0, 0, 0, 1), glm::vec3(0.0f, 0.8f, 0.0f)},
+		{glm::vec4(0, 0, 0, 1), glm::vec3(0.8f, 0.8f, 0.8f)}
+	};
+
+	float nbr_lights = 5.f;
+	float scale = 2.f * glm::pi<float>() / nbr_lights;
+
+	light[0].Position = glm::vec4( 5.f * cosf(scale * 0.f), 5.f, 5.f * sinf(scale * 0.f), 1.f);
+	light[1].Position = glm::vec4( 5.f * cosf(scale * 1.f), 5.f, 5.f * sinf(scale * 1.f), 1.f);
+	light[2].Position = glm::vec4( 5.f * cosf(scale * 2.f), 5.f, 5.f * sinf(scale * 2.f), 1.f);
+	light[3].Position = glm::vec4( 5.f * cosf(scale * 3.f), 5.f, 5.f * sinf(scale * 3.f), 1.f);
+	light[4].Position = glm::vec4( 5.f * cosf(scale * 4.f), 5.f, 5.f * sinf(scale * 4.f), 1.f);
+
 	GLfloat shiness = 10;
 	glm::vec3 Ka(0.2, 0.2, 0.2);
 	glm::vec3 Kd(1, 1, 0);
 	glm::vec3 Ks(1, 1, 1);
-
-	glUniform4fv(m_shaderProgram->uniform("Light.Position"), 1, glm::value_ptr(lightPos));
-	glUniform3fv(m_shaderProgram->uniform("Light.Ia"), 1, glm::value_ptr(Ia));
-	glUniform3fv(m_shaderProgram->uniform("Light.Id"), 1, glm::value_ptr(Id));
-	glUniform3fv(m_shaderProgram->uniform("Light.Is"), 1, glm::value_ptr(Is));
+	
+	for (int i = 0; i < 5; i++) {
+		glUniform4fv(m_shaderProgram->uniform("Light[" + std::to_string(i) + "].Position"), 1, glm::value_ptr(light[i].Position));
+		glUniform3fv(m_shaderProgram->uniform("Light[" + std::to_string(i) + "].Intensity"), 1, glm::value_ptr(light[i].Intensity));
+	}
 	glUniform3fv(m_shaderProgram->uniform("Material.Ka"), 1, glm::value_ptr(Ka));
 	glUniform3fv(m_shaderProgram->uniform("Material.Kd"), 1, glm::value_ptr(Kd));
 	glUniform3fv(m_shaderProgram->uniform("Material.Ks"), 1, glm::value_ptr(Ks));

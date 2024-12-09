@@ -81,7 +81,7 @@ void Plane::generateMesh()
 			square.normals = normals;
 			square.triIndices = triIndices;
 			square.mat = Material(
-				10.f, 							// Shiness
+				200.f, 							// Shiness
 				glm::vec3(0.1f, 0.1f, 0.1f),	// Ambiant
 				glm::vec3(1.f, 1.f, 1.f),		// Diffuse
 				glm::vec3(1.f, 1.f, 1.f)		// Specular

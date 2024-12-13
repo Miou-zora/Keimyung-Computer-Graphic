@@ -42,6 +42,7 @@ void MyGlWindow::initialize() {
 	m_teapot = new VBOTeapot();
 	m_quad = new Quad();
 	m_plane = new Plane();
+	m_bunny = new Bunny();
 }
 
 struct Light {
@@ -97,12 +98,13 @@ void MyGlWindow::draw() {
 
 	glUniform3fv(m_shaderProgram->uniform("CamPos"), 1, glm::value_ptr(m_viewer->getViewPoint()));
 
-	if (m_teapot) m_teapot->draw(projection, view, m_shaderProgram);
-	if (m_cow) m_cow->draw(projection, view, m_shaderProgram);
-	if (m_sphere) m_sphere->draw(projection, view, m_shaderProgram);
-	if (m_torus) m_torus->draw(projection, view, m_shaderProgram);
+	// if (m_teapot) m_teapot->draw(projection, view, m_shaderProgram);
+	// if (m_cow) m_cow->draw(projection, view, m_shaderProgram);
+	// if (m_sphere) m_sphere->draw(projection, view, m_shaderProgram);
+	// if (m_torus) m_torus->draw(projection, view, m_shaderProgram);
 	// if (m_quad) m_quad->draw(projection, view, m_shaderProgram);
 	if (m_plane) m_plane->draw(projection, view, m_shaderProgram);
+	if (m_bunny) m_bunny->draw(projection, view, m_shaderProgram);
 
 	m_shaderProgram->disable();
 }

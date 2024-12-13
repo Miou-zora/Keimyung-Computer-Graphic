@@ -9,6 +9,7 @@
 #include "vboteapot.h"
 #include "Quad.h"
 #include "Plane.h"
+#include "Bunny.h"
 
 #include "Viewer.h"
 
@@ -35,6 +36,8 @@ private:
 	VBOTeapot* m_teapot;
 	Quad* m_quad;
 	Plane* m_plane;
+	Bunny* m_bunny;
+
 
 	int m_width;
 	int m_height;
